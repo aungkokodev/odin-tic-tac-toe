@@ -4,17 +4,12 @@ function Gameboard() {
 
   const getBoard = () => gameboard;
 
-  const resetBoard = () => {
-    gameboard = Array(9).fill(null);
-  };
-
   const markCell = (cell, marker) => {
     gameboard[cell] = marker;
   };
 
   return {
     getBoard,
-    resetBoard,
     markCell,
   };
 }
@@ -54,9 +49,9 @@ function Game() {
     );
   };
 
-  const isDraw = () => isEnd() && !isWin();
-
   const isEnd = () => gameboard.getBoard().every((cell) => cell !== null);
+
+  const isDraw = () => isEnd() && !isWin();
 
   const isValid = (cell) => gameboard.getBoard()[cell] === null;
 
@@ -73,62 +68,63 @@ function Game() {
     isValid,
     placeMarker,
     getBoard: gameboard.getBoard,
-    resetBoard: gameboard.resetBoard,
   };
 }
 
 /* GameController */
 function GameController() {
-  const game = Game();
-
-  const dispalyBoard = () => {
-    const board = game.getBoard();
-    console.log(`
-    ${board[0] || " "} | ${board[1] || " "} | ${board[2] || " "}
-    ----------
-    ${board[3] || " "} | ${board[4] || " "} | ${board[5] || " "}
-    ----------
-    ${board[6] || " "} | ${board[7] || " "} | ${board[8] || " "}
-  `);
-  };
+  let game = Game();
 
   const isGameOver = () => {
     if (game.isDraw() || game.isWin()) return true;
     return false;
   };
 
-  const getGameResult = () => {
-    if (game.isWin()) return `${game.getActivePlayer().name} Win`;
-    else if (game.isDraw()) return "Game Draw";
+  const getGameStatus = () => {
+    if (game.isWin()) return `${game.getActivePlayer().name} wins the game!`;
+    else if (game.isDraw()) return "It's a draw!";
+    else return `${game.getActivePlayer().name}'s turn.`;
+  };
+
+  const renderGameboard = () => {
+    game.getBoard().forEach((cell, index) => {
+      const cellDiv = document.getElementById("cell-" + index);
+      cellDiv.textContent = cell;
+    });
+  };
+
+  const renderLabel = () => {
+    document.getElementsByClassName("label")[0].textContent = getGameStatus();
+  };
+
+  const startNewGame = () => {
+    game = Game();
+    renderLabel();
+    renderGameboard();
+    document.getElementsByClassName("gameboard")[0].style.display = "grid";
   };
 
   const playRound = (cell) => {
-    if (isGameOver()) return console.log(getGameResult());
-
-    if (!game.isValid(cell)) return console.log("Cell already marked!");
+    if (!game.isValid(cell)) return;
+    if (isGameOver()) return renderLabel();
 
     game.placeMarker(cell);
-    dispalyBoard();
+    renderGameboard();
 
-    if (isGameOver()) {
-      console.log(getGameResult());
-    } else {
+    if (!isGameOver()) {
       game.switchActivePlayer();
-      console.log(`${game.getActivePlayer().name}'s turn`);
     }
+
+    renderLabel();
   };
 
-  dispalyBoard();
-  console.log(`${game.getActivePlayer().name}'s turn`);
+  document.getElementById("start-btn").addEventListener("click", startNewGame);
 
-  const resetGame = () => {
-    game.resetBoard();
-    dispalyBoard();
-    console.log(`${game.getActivePlayer().name}'s turn`);
-  };
-
-  return {
-    playRound,
-    resetGame,
-  };
+  document.querySelectorAll(".cell").forEach((cell) => {
+    cell.addEventListener("click", (e) => {
+      playRound(parseInt(e.target.id.split("-")[1]));
+    });
+  });
 }
+
+GameController();

@@ -3,3 +3,93 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+:root {
+  color: #292524;
+  font-family: sans-serif;
+}
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #fafaf9;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.title {
+  padding-top: 2rem;
+}
+
+.btn {
+  align-self: center;
+  outline: none;
+  font-size: 1rem;
+  padding: 1rem 2rem;
+  background-color: transparent;
+  border: 1px solid #292524;
+  box-shadow: 4px 4px 1px 0px #2925244d;
+}
+
+.btn:hover {
+  cursor: pointer;
+  box-shadow: 4px 4px 0px 0px #29252480;
+}
+
+.btn:active {
+  box-shadow: none;
+}
+
+.gameboard {
+  display: none;
+  grid-template-columns: repeat(3, 100px);
+  grid-template-rows: repeat(3, 100px);
+  justify-content: center;
+}
+
+.cell {
+  font-size: 5rem;
+  border: 3px solid #292524;
+}
+
+.cell:hover {
+  cursor: pointer;
+}
+
+#cell-0 {
+  border-left: 0;
+  border-top: 0;
+}
+
+#cell-1 {
+  border-top: 0;
+}
+
+#cell-2 {
+  border-top: 0;
+  border-right: 0;
+}
+
+#cell-3 {
+  border-left: 0;
+}
+
+#cell-5 {
+  border-right: 0;
+}
+
+#cell-6 {
+  border-left: 0;
+  border-bottom: 0;
+}
+
+#cell-7 {
+  border-bottom: 0;
+}
+
+#cell-8 {
+  border-right: 0;
+  border-bottom: 0;
+}
